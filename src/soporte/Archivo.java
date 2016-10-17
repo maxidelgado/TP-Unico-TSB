@@ -21,7 +21,7 @@ public class Archivo
       }
 
     /**
-     * Obtiene la cantidad de líneas del archivo. Su funcionamiento es: usar un buffered reader, y avanzar linea por linea hasta que finaliza el archivo, incrementando un contador por cada linea.
+     * Obtiene la cantidad de líneas del archivo. Usa un buffered reader y avanzar linea por linea hasta que finaliza el archivo, incrementando un contador por cada linea.
      */
     public int tamaño()
       {
@@ -40,9 +40,8 @@ public class Archivo
       }
 
     /**
-     * Muestra el contenido del archivo.
-     * Sólo sirve para verificar que lea correctamente.
-     * Acumula las salidas en un StringBuilder
+     * Muestra el contenido del archivo. Sólo sirve para verificar que lea correctamente. Acumula las salidas en un StringBuilder
+     *
      * @return
      */
     public String mostrarLineas()
