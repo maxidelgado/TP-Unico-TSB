@@ -1,4 +1,5 @@
 package interfaz;
+
 import soporte.*;
 
 public class Principal
@@ -14,7 +15,10 @@ public class Principal
           {
             System.out.println("Error: " + ex.getMessage());
           }
+        
         Archivo arc = new Archivo();
-          System.out.println(arc.tamaño());
+
+          System.out.println(arc.mostrarLineas());
+        System.out.println("Total: " + arc.tamaño() + " lineas.");
       }
 }

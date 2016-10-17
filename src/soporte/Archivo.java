@@ -21,9 +21,7 @@ public class Archivo
       }
 
     /**
-    *Obtiene la cantidad de líneas del archivo.
-    *Su funcionamiento es: usar un buffered reader, y avanzar linea por linea
-    *hasta que finaliza el archivo, incrementando un contador por cada linea.
+     * Obtiene la cantidad de líneas del archivo. Su funcionamiento es: usar un buffered reader, y avanzar linea por linea hasta que finaliza el archivo, incrementando un contador por cada linea.
      */
     public int tamaño()
       {
@@ -39,5 +37,28 @@ public class Archivo
             System.err.println("Error al leer el archivo: " + ex.getMessage());
           }
         return lineas;
+      }
+
+    /**
+     * Muestra el contenido del archivo.
+     * Sólo sirve para verificar que lea correctamente.
+     * Acumula las salidas en un StringBuilder
+     * @return
+     */
+    public String mostrarLineas()
+      {
+        StringBuilder aux = new StringBuilder();
+        try (Scanner in = new Scanner(archivo))
+          {
+            while (in.hasNext())
+              {
+                aux.append(in.nextLine());
+                aux.append("\n");
+              }
+          } catch (IOException ex)
+          {
+            System.err.println("Error al leer el archivo: " + ex.getMessage());
+          }
+        return aux.toString();
       }
 }
