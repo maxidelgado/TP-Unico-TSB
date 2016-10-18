@@ -7,6 +7,7 @@ public class Principal
 
     public static void main(String[] args)
       {
+        /*
         try
           {
             Prueba p = new Prueba();
@@ -15,10 +16,11 @@ public class Principal
           {
             System.out.println("Error: " + ex.getMessage());
           }
-        
+        */
         Archivo arc = new Archivo();
 
-          System.out.println(arc.mostrarLineas());
+        arc.mostrarPalabras();
+          System.out.println("Total de palabras: " + arc.contarPalabras());
         System.out.println("Total: " + arc.tamaño() + " lineas.");
       }
 }
