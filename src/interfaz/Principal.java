@@ -17,11 +17,10 @@ public class Principal
             System.out.println("Error: " + ex.getMessage());
           }
         */
-        Archivo arc = new Archivo();
-
-        //arc.mostrarPalabras();
+        String[] paths = {"txt/16082-8.txt"};
+        
+        Archivo arc = new Archivo(paths, "Palabras");
+        
         arc.cargarDatabase();
-          System.out.println("Total de palabras: " + arc.contarPalabras());
-        System.out.println("Total: " + arc.tamaño() + " lineas.");
       }
 }
