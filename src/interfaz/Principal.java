@@ -19,7 +19,8 @@ public class Principal
         */
         Archivo arc = new Archivo();
 
-        arc.mostrarPalabras();
+        //arc.mostrarPalabras();
+        arc.cargarDatabase();
           System.out.println("Total de palabras: " + arc.contarPalabras());
         System.out.println("Total: " + arc.tamaño() + " lineas.");
       }
