@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 /**
  *
@@ -30,13 +31,12 @@ public class Database {
         nombre = name;
         try {
             File f = new File(nombre);
-            if (!f.exists()){
-            Class.forName("org.sqlite.JDBC");
-            Connection con = DriverManager.getConnection("jdbc:sqlite:" + nombre + ".db");
-            Statement stmt = con.createStatement();
-            stmt.executeUpdate("CREATE TABLE Vocabulario(ID INTEGER PRIMARY KEY AUTOINCREMENT, PALABRA TEXT NOT NULL, CANTIDAD INTEGER NOT NULL)");
-            }
-            else{
+            if (!f.exists()) {
+                Class.forName("org.sqlite.JDBC");
+                Connection con = DriverManager.getConnection("jdbc:sqlite:" + nombre + ".db");
+                Statement stmt = con.createStatement();
+                stmt.executeUpdate("CREATE TABLE Vocabulario(ID INTEGER PRIMARY KEY AUTOINCREMENT, PALABRA TEXT NOT NULL, CANTIDAD INTEGER NOT NULL)");
+            } else {
                 System.err.println("La DB ya existe.");
             }
         } catch (SQLException | ClassNotFoundException ex) {
@@ -44,16 +44,28 @@ public class Database {
         }
     }
 
-    public void cargar(String palabra, int cantidad) {
+    public void cargar(HashMap<String, Integer> map) {
+        int i = 0;
         try {
             Class.forName("org.sqlite.JDBC");
             Connection con = DriverManager.getConnection("jdbc:sqlite:" + nombre + ".db");
             PreparedStatement ps = con.prepareStatement("INSERT INTO Vocabulario(ID, PALABRA, CANTIDAD) VALUES (?,?,?)");
 
-            ps.setString(2, palabra);
-            ps.setInt(3, cantidad);
-            ps.executeUpdate();
+            con.setAutoCommit(false);
+            for (HashMap.Entry<String, Integer> entry : map.entrySet()) {
+                //System.out.println(entry.getKey()+": "+entry.getValue());
+                ps.setString(2, entry.getKey());
+                ps.setInt(3, entry.getValue());
+                ps.addBatch();
 
+                i++;
+
+                if (i % 3000 == 0 || i == map.size()) {
+                    System.out.println("item: " + i);
+                    ps.executeBatch();
+                }
+            }
+            con.commit();
         } catch (SQLException | ClassNotFoundException ex) {
             System.err.println("No se pudo crear la base: " + ex.getMessage());
         }

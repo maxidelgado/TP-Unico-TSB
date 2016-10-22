@@ -156,7 +156,8 @@ public class Prueba extends javax.swing.JFrame {
             File file = fileChooser.getSelectedFile();
 
             String origin = file.getAbsolutePath();
-            String dest = "txt/" + file.getName();
+            String dest = txtLocation + file.getName();
+            
             File destination = new File(dest);
             copyDirectory(file, destination);
         } catch (IOException ex) {

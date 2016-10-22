@@ -138,6 +138,7 @@ public class Archivo {
                 in.useDelimiter("[^A-Za-zñ'áéíóú]");
                 while (in.hasNext()) {
                     String aux = in.next();
+                    aux = aux.toLowerCase();
                     if (!aux.isEmpty()) {
                         Conteo.add(aux);
                     }
@@ -147,8 +148,6 @@ public class Archivo {
                 System.err.println("Error al leer el archivo: " + ex.getMessage());
             }
         }
-        for (HashMap.Entry<String, Integer> entry : Conteo.getHashMap().entrySet()) {
-            base.cargar(entry.getKey(), entry.getValue());
-        }
+        base.cargar(Conteo.getHashMap());
     }
 }
