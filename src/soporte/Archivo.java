@@ -13,7 +13,7 @@
 package soporte;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -21,15 +21,13 @@ import java.util.Scanner;
  * @author rodrigo
  */
 public class Archivo {
-
-    private File[] archivos;
+    private ArrayList<File> files;
     private Database base;
 
     public Archivo(String[] paths, String nomDB) {
-        archivos = new File[paths.length];
-
-        for (int i = 0; i < archivos.length; i++) {
-            archivos[i] = new File(paths[i]);
+        files = new ArrayList<>();
+        for (String path : paths) {
+            files.add(new File(path));
         }
         base = new Database(nomDB);
     }
@@ -43,7 +41,7 @@ public class Archivo {
      */
     public int tamaño() {
         int lineas = 0;
-        for (File archivo : archivos) {
+        for (File archivo : files) {
             try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
                 while (null != br.readLine()) {
                     lineas++;
@@ -64,7 +62,7 @@ public class Archivo {
      */
     public String mostrarLineas() {
         StringBuilder aux = new StringBuilder();
-        for (File archivo : archivos) {
+        for (File archivo : files) {
             try (Scanner in = new Scanner(archivo)) {
                 while (in.hasNext()) {
                     aux.append(in.nextLine());
@@ -86,7 +84,7 @@ public class Archivo {
      * tildes
      */
     public void mostrarPalabras() {
-        for (File archivo : archivos) {
+        for (File archivo : files) {
             try (Scanner in = new Scanner(archivo, "CP1252")) {
                 in.useDelimiter("[^A-Za-zñ'áéíóú]");
                 while (in.hasNext()) {
@@ -110,7 +108,7 @@ public class Archivo {
      */
     public int contarPalabras() {
         int cantidad = 0;
-        for (File archivo : archivos) {
+        for (File archivo : files) {
             try (Scanner in = new Scanner(archivo, "CP1252")) {
                 in.useDelimiter("[^A-Za-zñ'áéíóú]");
                 while (in.hasNext()) {
@@ -132,9 +130,10 @@ public class Archivo {
      * posteriormente guarda el resultado en la DB.
      */
     public void cargarDatabase() {
-        for (File archivo : archivos) {
+        
+        for (File file : files) {
             int cantidad = 0;
-            try (Scanner in = new Scanner(archivo, "CP1252")) {
+            try (Scanner in = new Scanner(file, "CP1252")) {
                 in.useDelimiter("[^A-Za-zñ'áéíóú]");
                 while (in.hasNext()) {
                     String aux = in.next();
@@ -148,6 +147,8 @@ public class Archivo {
                 System.err.println("Error al leer el archivo: " + ex.getMessage());
             }
         }
-        base.cargar(Conteo.getHashMap());
+        base.open();
+        base.insert(Conteo.getHashMap());
+        base.close();
     }
 }

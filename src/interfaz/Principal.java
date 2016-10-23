@@ -17,7 +17,9 @@ public class Principal
             System.out.println("Error: " + ex.getMessage());
           }
         */
-        String[] paths = {"txt/asd.txt"};
+        String[] paths = {"txt/16082-8.txt", "txt/18166-8.txt", "txt/22975-8.txt", "txt/41575-8.txt"};
+        
+        //String[] paths = {"txt/asd.txt"};
         
         Archivo arc = new Archivo(paths, "Palabras");
         
