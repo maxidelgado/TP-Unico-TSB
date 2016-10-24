@@ -21,6 +21,7 @@ import java.util.Scanner;
  * @author rodrigo
  */
 public class Archivo {
+
     private ArrayList<File> files;
     private Database base;
 
@@ -130,11 +131,12 @@ public class Archivo {
      * posteriormente guarda el resultado en la DB.
      */
     public void cargarDatabase() {
-        
+
         for (File file : files) {
             int cantidad = 0;
+            Conteo.clear();
             try (Scanner in = new Scanner(file, "CP1252")) {
-                in.useDelimiter("[^A-Za-zñ'áéíóú]");
+                in.useDelimiter("[^A-Za-zñáéíóú]");
                 while (in.hasNext()) {
                     String aux = in.next();
                     aux = aux.toLowerCase();
@@ -143,12 +145,13 @@ public class Archivo {
                     }
                 }
 
+                base.open();
+                base.createTable();
+                base.insert(Conteo.getHashMap());
+                base.close();
             } catch (IOException ex) {
                 System.err.println("Error al leer el archivo: " + ex.getMessage());
             }
         }
-        base.open();
-        base.insert(Conteo.getHashMap());
-        base.close();
     }
 }

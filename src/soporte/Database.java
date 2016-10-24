@@ -32,7 +32,6 @@ public class Database {
 
     public Database(String nom) {
         nombre = nom;
-        createTable();
     }
 
     public void open() {
@@ -121,7 +120,7 @@ public class Database {
             ResultSet rs = select(palabra);
             cant = rs.getInt("CANTIDAD");
             int total = cant + c;
-
+            con.setAutoCommit(false);
             PreparedStatement ps = con.prepareStatement("UPDATE Vocabulario SET CANTIDAD=" + total + " WHERE PALABRA=" + "'" + palabra + "'");
             ps.executeUpdate();
         } catch (SQLException ex) {

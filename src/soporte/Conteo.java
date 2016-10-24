@@ -36,4 +36,11 @@ public class Conteo {
     public static HashMap<String, Integer> getHashMap(){
         return hm;
     }
+    
+    /**
+     * Método que limpia el HashMap
+     */
+    public static void clear(){
+        hm.clear();
+    }
 }
