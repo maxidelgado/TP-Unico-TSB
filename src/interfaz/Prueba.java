@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import soporte.Archivo;
+import soporte.Database;
 
 /**
  *
@@ -24,13 +26,15 @@ import javax.swing.tree.DefaultTreeModel;
 public class Prueba extends javax.swing.JFrame {
 
     private String txtLocation = "txt/";
-
+    private Archivo archivo;
+    private Database db;
     /**
      * Creates new form Prueba
      *
      * @throws java.lang.InterruptedException
      */
     public Prueba() throws InterruptedException {
+        this.db = new Database("Palabras");
         initComponents();
         scanner();
     }
@@ -42,7 +46,8 @@ public class Prueba extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -53,10 +58,9 @@ public class Prueba extends javax.swing.JFrame {
         bLoad = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        JScrollPane2 = new javax.swing.JScrollPane();
-        txtLabel = new javax.swing.JTextArea();
         txtSearch = new javax.swing.JTextField();
         bSearch = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -82,8 +86,10 @@ public class Prueba extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tree);
 
         bAdd.setText("Agregar");
-        bAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bAdd.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 bAddActionPerformed(evt);
             }
         });
@@ -93,10 +99,6 @@ public class Prueba extends javax.swing.JFrame {
         jLabel1.setText("Libros");
 
         jLabel2.setText("Palabras aprendidas");
-
-        txtLabel.setColumns(20);
-        txtLabel.setRows(5);
-        JScrollPane2.setViewportView(txtLabel);
 
         bSearch.setText("Buscar");
 
@@ -114,14 +116,14 @@ public class Prueba extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bSearch))
-                    .addComponent(JScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -135,8 +137,8 @@ public class Prueba extends javax.swing.JFrame {
                     .addComponent(bSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(JScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bAdd)
@@ -263,7 +265,6 @@ public class Prueba extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane JScrollPane2;
     private javax.swing.JButton bAdd;
     private javax.swing.JButton bLoad;
     private javax.swing.JButton bSearch;
@@ -272,9 +273,9 @@ public class Prueba extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTree tree;
-    private javax.swing.JTextArea txtLabel;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
