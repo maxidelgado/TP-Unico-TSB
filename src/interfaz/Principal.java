@@ -27,4 +27,10 @@ public class Principal
         //arc.cargarDatabase();
         //arc.mostrarDatabase();
       }
+    public static void reload(Ventana v)
+      {
+        v.dispose();
+        v = new Ventana();
+        v.setVisible(true);
+      }
 }
