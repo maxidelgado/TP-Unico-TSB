@@ -28,9 +28,9 @@ public class Ventana extends javax.swing.JFrame
     private Archivo archivo;
     private ArrayList<File> tareas;
     private ArrayList<Word> contenidoTabla;
-
+    private TableModelPalabras tabla;
     /**
-     * Creates new form Ventana
+     * Constructor de ventanas
      */
     public Ventana()
       {
@@ -38,7 +38,10 @@ public class Ventana extends javax.swing.JFrame
         base.open();
         tareas = new ArrayList<>();
         contenidoTabla = base.toWordArray();
+        tabla = new TableModelPalabras();
+        
         initComponents();
+
         jtaCola.setEditable(false);
         base.close();
       }
@@ -62,7 +65,7 @@ public class Ventana extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable.setModel(new TableModelPalabras());
+        jTable.setModel(tabla);
         jScrollPaneTabla.setViewportView(jTable);
 
         btnCargar.setText("Cargar");
@@ -109,7 +112,7 @@ public class Ventana extends javax.swing.JFrame
                     .addComponent(jScrollPaneTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jlPalabras, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 151, Short.MAX_VALUE))))
+                        .addGap(0, 152, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,6 +156,7 @@ public class Ventana extends javax.swing.JFrame
         //Se actualiza el arrayList que contiene los elementos de la tabla
         //Por lo tanto, se actualiza la tabla.
         contenidoTabla = base.toWordArray();
+        tabla.fireTableDataChanged();
         //Se limpia la caja de texto Libros, para restablecer la lista de tareas
         jtaCola.setText("");
         tareas.clear();
