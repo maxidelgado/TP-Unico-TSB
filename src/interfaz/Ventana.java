@@ -26,7 +26,7 @@ public class Ventana extends javax.swing.JFrame
     private Database db;
     private Archivo arc;
     private ArrayList<File> cola;
-
+    private ArrayList arr;
     /**
      * Creates new form Ventana
      */
@@ -35,6 +35,7 @@ public class Ventana extends javax.swing.JFrame
         this.db = new Database("PRUEBA");
         db.open();
         cola = new ArrayList<>();
+        arr = db.toArray();
         initComponents();
         jtaCola.setEditable(false);
         db.close();
@@ -151,7 +152,8 @@ public class Ventana extends javax.swing.JFrame
           }
         arc = new Archivo(paths, "PRUEBA");
         arc.cargarDatabase();
-        Principal.reload(this);    
+        arr = db.toArray();
+        jlLibros.setText("");
         JOptionPane.showMessageDialog(this, "Las palabras se agregaron exitosamente.", "Cola procesada", 1);
         db.close();
     }//GEN-LAST:event_btnCargarActionPerformed
@@ -198,7 +200,7 @@ public class Ventana extends javax.swing.JFrame
     private class TableModelPalabras extends AbstractTableModel
     {
 
-        ArrayList arr = db.toArray();
+       
         
         @Override
         public int getRowCount()
