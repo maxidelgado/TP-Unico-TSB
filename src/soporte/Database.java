@@ -177,4 +177,24 @@ public class Database
         return arr;
       }
 
+        public ArrayList toWordArray()
+      {
+        ResultSet rs = null;
+        ArrayList<Word> arr = new ArrayList<>();
+        try
+          {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM Vocabulario");
+            rs = ps.executeQuery();
+            while (rs.next())
+              {
+                Word w;
+                w = new Word(rs.getInt("ID"),rs.getString("PALABRA"),rs.getInt("CANTIDAD"), 0);
+                arr.add(w);
+              }
+          } catch (SQLException ex)
+          {
+            System.err.println("No se pudo ejecutar la consulta: " + ex.getMessage());
+          }
+        return arr;
+      }
 }

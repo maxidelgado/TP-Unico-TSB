@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 import org.sqlite.core.DB;
 import soporte.Archivo;
+import soporte.Word;
 
 /**
  *
@@ -23,22 +24,23 @@ import soporte.Archivo;
 public class Ventana extends javax.swing.JFrame
 {
 
-    private Database db;
-    private Archivo arc;
-    private ArrayList<File> cola;
-    private ArrayList arr;
+    private Database base;
+    private Archivo archivo;
+    private ArrayList<File> tareas;
+    private ArrayList<Word> contenidoTabla;
+
     /**
      * Creates new form Ventana
      */
     public Ventana()
       {
-        this.db = new Database("PRUEBA");
-        db.open();
-        cola = new ArrayList<>();
-        arr = db.toArray();
+        this.base = new Database("PRUEBA");
+        base.open();
+        tareas = new ArrayList<>();
+        contenidoTabla = base.toWordArray();
         initComponents();
         jtaCola.setEditable(false);
-        db.close();
+        base.close();
       }
 
     /**
@@ -130,40 +132,38 @@ public class Ventana extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Procesa los archivos en cola.
-     * Arma un vector de direcciones, a partir de los elementos de la cola.
-     * crea un nuevo Archivo y le da como parámetro el vector anterior y el nombre de la base
-     * después, Archivo se encarga de procesar los archivos del vector y actualizar la base.
-     * El método reload es una basura temporal, lo que hace es eliminar la misma ventana y crear otra.
-     * Falta implementar alguna manera de actualizar solamente la tabla.
-     * 
-     * @param evt 
+     * Procesa los archivos en cola. Arma un vector de rutas, a partir de los elementos de la cola. crea un nuevo Archivo y le da como parámetro el vector anterior y el nombre de la base después, Archivo se encarga de procesar los archivos del vector y actualizar la base.
+     *
+     * @param evt
      */
     private void btnCargarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCargarActionPerformed
     {//GEN-HEADEREND:event_btnCargarActionPerformed
-        db.open();
-        String paths[] = new String[cola.size()];
+        base.open();
+        //Arma el vector con las rutas completas de los archivos
+        String paths[] = new String[tareas.size()];
         int i = 0;
-        for (File file : cola)
+        for (File file : tareas)
           {
-            System.out.println(file.getAbsolutePath());
             paths[i] = file.getAbsolutePath();
             i++;
           }
-        arc = new Archivo(paths, "PRUEBA");
-        arc.cargarDatabase();
-        arr = db.toArray();
-        jlLibros.setText("");
+        //Crea el archivo y lo carga en la base de datos
+        archivo = new Archivo(paths, "PRUEBA");
+        archivo.cargarDatabase();
+        //Se actualiza el arrayList que contiene los elementos de la tabla
+        //Por lo tanto, se actualiza la tabla.
+        contenidoTabla = base.toWordArray();
+        //Se limpia la caja de texto Libros, para restablecer la lista de tareas
+        jtaCola.setText("");
+        tareas.clear();
         JOptionPane.showMessageDialog(this, "Las palabras se agregaron exitosamente.", "Cola procesada", 1);
-        db.close();
+        base.close();
+
     }//GEN-LAST:event_btnCargarActionPerformed
     /**
-     * Permite elegir un archivo.
-     * Está basado en el ejemplo provisto por los docentes.
-     * Luego de seleccionar el archivo, lo agrega a una cola de elementos a procesar
-     * (por el botón Cargar).
-     * Va mostrando los elementos de la cola en un textArea no editable.
-     * @param evt 
+     * Permite elegir un archivo. Está basado en el ejemplo provisto por los docentes. Luego de seleccionar el archivo, lo agrega a una cola de elementos a procesar (por el botón Cargar). Va mostrando los elementos de la cola en un textArea no editable.
+     *
+     * @param evt
      */
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAgregarActionPerformed
     {//GEN-HEADEREND:event_btnAgregarActionPerformed
@@ -186,7 +186,7 @@ public class Ventana extends javax.swing.JFrame
         if (selector.showDialog(this, "Abrir") != JFileChooser.CANCEL_OPTION)
           {
             File file = selector.getSelectedFile();
-            cola.add(file);
+            tareas.add(file);
             if (!jtaCola.getText().isEmpty())
               {
                 jtaCola.setText(jtaCola.getText() + '\n' + file.getName());
@@ -200,18 +200,16 @@ public class Ventana extends javax.swing.JFrame
     private class TableModelPalabras extends AbstractTableModel
     {
 
-       
-        
         @Override
         public int getRowCount()
           {
-            return arr.size();
+            return contenidoTabla.size();
           }
 
         @Override
         public int getColumnCount()
           {
-            return 2;
+            return 3;
           }
 
         @Override
@@ -219,16 +217,16 @@ public class Ventana extends javax.swing.JFrame
           {
             try
               {
-                Pair p = (Pair) arr.get(rowIndex);
+                Word w = (Word) contenidoTabla.get(rowIndex);
                 switch (columnIndex)
                   {
 
                     case 0:
-
-                        return p.getKey();
+                        return contenidoTabla.get(rowIndex).getId();
                     case 1:
-
-                        return p.getValue();
+                        return contenidoTabla.get(rowIndex).getPalabra();
+                    case 2:
+                        return contenidoTabla.get(rowIndex).getCantidad();
                   }
 
               } catch (Exception e)
@@ -243,7 +241,7 @@ public class Ventana extends javax.swing.JFrame
           {
             String[] cols =
               {
-                "Palabra", "Frecuencia"
+                "Id","Palabra", "Cantidad"
               };
             return cols[column];
           }
