@@ -9,19 +9,19 @@ package soporte;
  *
  * @author Rodrigo Gomez
  */
-public class Word
+public class Palabra
 {
     private String palabra;
     private int id;
     private int cantidad;
-    private int origenes;
+    private String libros;
 
-    public Word(int id, String palabra, int cantidad, int origenes)
+    public Palabra(int id, String palabra, int cantidad, String libros)
       {
         this.id = id;
         this.palabra = palabra;
         this.cantidad = cantidad;
-        this.origenes = origenes;
+        this.libros = libros;
       }
 
     public String getPalabra()
@@ -54,20 +54,18 @@ public class Word
         this.cantidad = cantidad;
       }
 
-    public int getOrigenes()
-      {
-        return origenes;
-      }
+    public String getLibros() {
+        return libros;
+    }
 
-    public void setOrigenes(int origenes)
-      {
-        this.origenes = origenes;
-      }
+    public void setLibros(String libros) {
+        this.libros = libros;
+    }
 
     @Override
     public String toString()
       {
-        return "Word{" + "palabra=" + palabra + ", id=" + id + ", cantidad=" + cantidad + ", origenes=" + origenes + '}';
+        return "Word{" + "palabra=" + palabra + ", id=" + id + ", cantidad=" + cantidad + ", libros=" + libros + '}';
       }
 
 }
