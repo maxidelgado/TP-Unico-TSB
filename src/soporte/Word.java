@@ -9,65 +9,55 @@ package soporte;
  *
  * @author Rodrigo Gomez
  */
-public class Word
-{
+public class Word {
+
     private String palabra;
     private int id;
     private int cantidad;
     private int origenes;
 
-    public Word(int id, String palabra, int cantidad, int origenes)
-      {
+    public Word(int id, String palabra, int cantidad, int origenes) {
         this.id = id;
         this.palabra = palabra;
         this.cantidad = cantidad;
         this.origenes = origenes;
-      }
+    }
 
-    public String getPalabra()
-      {
+    public String getPalabra() {
         return palabra;
-      }
+    }
 
-    public void setPalabra(String palabra)
-      {
+    public void setPalabra(String palabra) {
         this.palabra = palabra;
-      }
+    }
 
-    public int getId()
-      {
+    public int getId() {
         return id;
-      }
+    }
 
-    public void setId(int id)
-      {
+    public void setId(int id) {
         this.id = id;
-      }
+    }
 
-    public int getCantidad()
-      {
+    public int getCantidad() {
         return cantidad;
-      }
+    }
 
-    public void setCantidad(int cantidad)
-      {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
-      }
+    }
 
-    public int getOrigenes()
-      {
+    public int getOrigenes() {
         return origenes;
-      }
+    }
 
-    public void setOrigenes(int origenes)
-      {
+    public void setOrigenes(int origenes) {
         this.origenes = origenes;
-      }
+    }
 
     @Override
-    public String toString()
-      {
+    public String toString() {
         return "Word{" + "palabra=" + palabra + ", id=" + id + ", cantidad=" + cantidad + ", origenes=" + origenes + '}';
-      }
+    }
 
 }

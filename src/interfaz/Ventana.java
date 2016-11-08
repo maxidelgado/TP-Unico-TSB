@@ -192,14 +192,7 @@ public class Ventana extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    /**
-     * Procesa los archivos en cola. Arma un vector de rutas, a partir de los
-     * elementos de la cola. crea un nuevo Archivo y le da como parámetro el
-     * vector anterior y el nombre de la base después, Archivo se encarga de
-     * procesar los archivos del vector y actualizar la base.
-     *
-     * @param evt
-     */
+
     private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnProcesarActionPerformed
     {//GEN-HEADEREND:event_btnProcesarActionPerformed
         if (!tareas.isEmpty()) {
@@ -346,7 +339,14 @@ public class Ventana extends javax.swing.JFrame {
         }
 
         @Override
-        //Le encargo un proceso y lo hace de fondo mientras la interfaz se mantiene activa
+        /**
+         * Procesa los archivos en cola. Arma un vector de rutas, a partir de
+         * los elementos de la cola. crea un nuevo Archivo y le da como
+         * parámetro el vector anterior y el nombre de la base después, Archivo
+         * se encarga de procesar los archivos del vector y actualizar la base.
+         *
+         * @param evt
+         */
         protected String doInBackground() throws Exception {
             JOptionPane.showMessageDialog(rootPane, "Agregando las palabras...", "Procesando", 1);
             String s = "Enviando a otro hilo..";

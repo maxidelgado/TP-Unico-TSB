@@ -18,6 +18,9 @@ public class Database {
     private Connection con;
     private int map_size;
 
+    /**
+     * El constructor crea la DB y todas las tablas necesarias para el trabajo.
+     */
     public Database() {
         map_size = 0;
         nombre = "Vocabulario";
@@ -43,6 +46,9 @@ public class Database {
         }
     }
 
+    /**
+     * Abre la conexión con la DB.
+     */
     public void open() {
         try {
             con = DriverManager.getConnection("jdbc:sqlite:" + nombre + ".db");
@@ -54,6 +60,9 @@ public class Database {
         }
     }
 
+    /**
+     * Cierra la conexión con la DB.
+     */
     public void close() {
         try {
             con.close();
@@ -62,33 +71,40 @@ public class Database {
         }
     }
 
+    /**
+     * Método sencillo para ejecutar sentencias SQL.
+     *
+     * @param sql
+     * @throws SQLException
+     */
     public void execute_sql(String sql) throws SQLException {
         PreparedStatement stmt = con.prepareStatement(sql);
         stmt.executeUpdate();
     }
-    
+
     /**
      * Recibe el nombre de un libro y su correspondiente LinkedHashMap de conteo
-     * de palabras.
-     * Inserta el libro con su respectivo ID en una tabla, la palabra con su ID y
-     * cantidad de apariciones en otra tabla y luego inserta el ID de la palabra
-     * y el libro en el que fue hallada en otra tabla.
+     * de palabras. Inserta el libro con su respectivo ID en una tabla, la
+     * palabra con su ID y cantidad de apariciones en otra tabla y luego inserta
+     * el ID de la palabra y el libro en el que fue hallada en otra tabla.
+     *
      * @param libro
-     * @param map 
+     * @param map
      */
     public void insert(String libro, HashMap<String, Integer> map) {
         try {
 
             int i = 0;
             /**
-             * Las sentencias SQL están condicionadas para que no haya repetición.
+             * Las sentencias SQL están condicionadas para que no haya
+             * repetición.
              */
             String sql_contains = "SELECT * FROM palabras WHERE PALABRA = (?)";
             String sql_libro = "INSERT INTO libros (LIBRO)"
-                + "SELECT * FROM (SELECT (?)) AS tmp "
-                + "WHERE NOT EXISTS"
-                + "(SELECT LIBRO FROM libros WHERE LIBRO = (?))"
-                + "LIMIT 1;";
+                    + "SELECT * FROM (SELECT (?)) AS tmp "
+                    + "WHERE NOT EXISTS"
+                    + "(SELECT LIBRO FROM libros WHERE LIBRO = (?))"
+                    + "LIMIT 1;";
             String sql_palabra = "INSERT INTO palabras(ID, PALABRA, CANTIDAD) VALUES (?,?,?)";
             String sql_palabraxlibro = "INSERT INTO palabrasxlibro (ID_Palabra, ID_Libro) "
                     + "SELECT * FROM (SELECT palabras.ID as idpal, libros.ID as idlib "
@@ -99,12 +115,18 @@ public class Database {
                     + "AND ID_Libro = idlib) LIMIT 1;";
             String sql_update = "UPDATE palabras SET CANTIDAD = CANTIDAD + (?) WHERE PALABRA = (?);";
 
+            /**
+             * Hay un PreparedStatement por cada operación de inserción que
+             * realiza un batch para insertar una vez cada n elementos. De esta
+             * manera se evita la pérdida total de datos en caso de interrumpir
+             * la inserción en la DB.
+             */
             PreparedStatement ps_libro = con.prepareStatement(sql_libro);
             PreparedStatement ps_palabra = con.prepareStatement(sql_palabra);
             PreparedStatement ps_palabraxlibro = con.prepareStatement(sql_palabraxlibro);
             PreparedStatement ps_update = con.prepareStatement(sql_update);
             PreparedStatement ps_contains = con.prepareStatement(sql_contains);
-            
+
             ps_libro.setString(1, libro);
             ps_libro.setString(2, libro);
             ps_libro.executeUpdate();
@@ -113,10 +135,10 @@ public class Database {
             for (HashMap.Entry<String, Integer> entry : map.entrySet()) {
                 String palabra = entry.getKey();
                 int cantidad = entry.getValue();
-                
+
                 ps_contains.setString(1, palabra);
                 ResultSet rs = ps_contains.executeQuery();
-                
+
                 ps_palabraxlibro.setString(1, palabra);
                 ps_palabraxlibro.setString(2, libro);
                 ps_palabraxlibro.addBatch();
@@ -147,25 +169,34 @@ public class Database {
         }
     }
 
-        public ArrayList toWordArray()
-      {
+    /**
+     * Esta clase está diseñada para retornar un ArrayList de "palabras". Este
+     * ArrayList es el que usa el modelo abstracto de la grilla de la interfaz
+     * para llenarse.
+     *
+     * @return
+     */
+    public ArrayList toWordArray() {
         ResultSet rs = null;
         ArrayList<Word> arr = new ArrayList<>();
+
+        /**
+         * Esta consulta retorna un ResultSet que tiene todos los datos de las
+         * palabras, incluida la cantidad de libros distintos en la que se
+         * encontró.
+         */
         String sql = "SELECT palabras.ID, palabras.PALABRA, palabras.CANTIDAD, count(palabrasxlibro.ID_Libro) as TOTAL FROM palabrasxlibro INNER JOIN palabras,libros ON  palabras.ID = palabrasxlibro.ID_Palabra and libros.ID = palabrasxlibro.ID_Libro group by palabrasxlibro.ID_Palabra;";
-        try
-          {
+        try {
             PreparedStatement ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            while (rs.next())
-              {
+            while (rs.next()) {
                 Word w;
-                w = new Word(rs.getInt("ID"),rs.getString("PALABRA"),rs.getInt("CANTIDAD"), rs.getInt("TOTAL"));
+                w = new Word(rs.getInt("ID"), rs.getString("PALABRA"), rs.getInt("CANTIDAD"), rs.getInt("TOTAL"));
                 arr.add(w);
-              }
-          } catch (SQLException ex)
-          {
+            }
+        } catch (SQLException ex) {
             System.err.println("No se pudo ejecutar la consulta: " + ex.getMessage());
-          }
+        }
         return arr;
-      }
+    }
 }

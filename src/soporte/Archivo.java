@@ -28,6 +28,12 @@ public class Archivo {
         this.file = file;
     }
 
+    /**
+     * Lee el archivo utilizando expresiones regulares para determinar qué es
+     * una palabra y qué no lo es.
+     *
+     * @return
+     */
     public HashMap<String, Integer> leer() {
         try (Scanner in = new Scanner(file, "CP1252")) {
             in.useDelimiter("[^A-Za-zñáéíóú]");
